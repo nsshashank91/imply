@@ -1,0 +1,47 @@
+{
+  "type": "kafka",
+  "dataSchema": {
+    "dataSource": "ecommerce",
+    "parser": {
+      "type": "string",
+      "parseSpec": {
+        "format": "json",
+        "timestampSpec": {
+          "column": "time",
+          "format": "auto"
+        },
+          "dimensionsSpec" : {
+            "dimensions": [
+              { "name" : "productId", "type" : "int" },
+              { "name" : "productName", "type" : "string" },
+              { "name" : "productDesc", "type" : "string" },
+              { "name" : "createdBy", "type" : "string" },
+              { "name" : "modelYear", "type" : "string" }
+            ]
+          }      
+        }
+      },
+      "metricsSpec" : [
+        { "type" : "count", "name" : "count" }
+      ],
+      "granularitySpec" : {
+        "type" : "uniform",
+        "segmentGranularity" : "HOUR",
+        "queryGranularity" : "NONE",
+        "rollup" : false
+      }
+    },
+    "ioConfig": {
+      "type":"kafka",
+      "topic": "product",
+      "consumerProperties": {
+        "bootstrap.servers": "localhost:9092"
+      },
+      "taskDuration": "PT5M",
+      "useEarliestOffset": "true"
+    },
+    "tuningConfig" : {
+      "type" : "kafka",
+      "maxRowsPerSegment" : 500000
+    }
+  }
